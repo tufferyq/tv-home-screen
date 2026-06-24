@@ -13,12 +13,11 @@ export default function App() {
 
   return (
     <div
-      className="relative flex flex-col justify-between"
+      className="relative flex"
       style={{
         width: '1920px',
         height: '1080px',
         background: 'linear-gradient(135deg, #0a0a0f 0%, #0d1117 40%, #0a0f1a 100%)',
-        padding: '80px 100px',
       }}
     >
       {/* Decorative glow */}
@@ -26,34 +25,36 @@ export default function App() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse 800px 600px at 20% 30%, rgba(99,102,241,0.04) 0%, transparent 70%)',
+            'radial-gradient(ellipse 900px 700px at 15% 40%, rgba(99,102,241,0.05) 0%, transparent 70%)',
         }}
       />
 
-      {/* TOP ROW: Clock + Train */}
-      <div className="flex items-start justify-between relative z-10">
+      {/* LEFT COLUMN: Clock + Weather */}
+      <div
+        className="relative z-10 flex flex-col justify-between"
+        style={{ padding: '72px 64px', flex: '1 1 auto' }}
+      >
         <Clock />
-        <TrainCard train={train} onRefresh={refreshTrain} />
-      </div>
 
-      {/* BOTTOM ROW: Weather */}
-      <div className="flex items-end justify-between relative z-10">
-        <div className="flex gap-6">
+        <div className="flex gap-6 items-end">
           {weatherLoading && (
             <div className="text-white/30 text-xl">Chargement météo…</div>
           )}
           {weatherError && (
             <div className="text-red-400/70 text-xl">{weatherError}</div>
           )}
-          {weather.map((w) => (
-            <WeatherCard key={w.city} data={w} />
+          {weather.map((w, i) => (
+            <WeatherCard key={w.city} data={w} role={i === 0 ? 'departure' : 'arrival'} />
           ))}
         </div>
+      </div>
 
-        <div className="text-white/10 text-base tracking-widest uppercase text-right">
-          <div>Fluo Grand Est</div>
-          <div className="text-white/5 text-sm">Troyes — Paris Est · 07:47</div>
-        </div>
+      {/* RIGHT COLUMN: Train */}
+      <div
+        className="relative z-10 flex flex-col justify-center items-end"
+        style={{ padding: '72px 72px 72px 0', flexShrink: 0 }}
+      >
+        <TrainCard train={train} onRefresh={refreshTrain} />
       </div>
     </div>
   )
