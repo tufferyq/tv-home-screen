@@ -23,8 +23,9 @@ async function fetchTrainStatus(apiKey: string): Promise<TrainInfo> {
 
   const url = `${SNCF_API_BASE}/stop_areas/${TROYES_STOP_ID}/departures?from_datetime=${todayStr}T054700&count=20&data_freshness=realtime`
 
+  // SNCF API uses HTTP Basic Auth: token as username, empty password
   const res = await fetch(url, {
-    headers: { Authorization: apiKey },
+    headers: { Authorization: `Basic ${btoa(apiKey + ':')}` },
   })
 
   if (!res.ok) throw new Error(`SNCF API error: ${res.status}`)
